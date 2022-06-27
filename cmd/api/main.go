@@ -2,26 +2,36 @@ package main
 
 import (
 	"api_course/internal/database"
-	"api_course/internal/service/exercise"
-	"api_course/internal/service/user"
+	"api_course/internal/exercise"
+	"api_course/internal/middleware"
+	"api_course/internal/user"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	
+	// init routes
 	route := gin.Default()
-	route.GET("/hello", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "Hello World",
-		})
-	})
 
 	// connect to database
 	db := database.NewDatabaseConnection()
+
 	exerciseService := exercise.NewExerciseService(db)
 	userService := user.NewUserService(db)
 
 	route.GET("/exercise/:id", exerciseService.GetExercise)
+	
+	//exercise
+	route.POST("/exercises", middleware.Authentication(userService), exerciseService.CreateExercise)
+	route.GET("/exercises/:exerciseId", middleware.Authentication(userService), exerciseService.GetExercise)
+	route.GET("/exercises/:exerciseId/score", middleware.Authentication(userService), exerciseService.GetUserScore)
+	route.POST("/exercises/:exerciseId/questions", middleware.Authentication(userService), exerciseService.CreateQuestions)
+	route.POST("/exercises/:exerciseId/questions/:questionId/answer", middleware.Authentication(userService), exerciseService.CreateAnswer)
+	
+	//user
 	route.POST("/register", userService.RegisterUser)
+	route.POST("/login", userService.LoginUser)
+
 	route.Run(":8080")
 }
