@@ -68,7 +68,7 @@ func (ex ExerciseService) CreateExercise(ctx *gin.Context) {
 	ctx.JSON(201, exercise)
 }
 
-func (ex ExerciseService) GetUserScore(ctx *gin.Context) {
+func (ex ExerciseService) GetScore(ctx *gin.Context) {
 	paramExerciseID := ctx.Param("exerciseId")
 	exerciseID, err := strconv.Atoi(paramExerciseID)
 	if err != nil {

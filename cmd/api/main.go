@@ -26,7 +26,7 @@ func main() {
 	
 	route.POST("/exercises", middleware.Authentication(userService), exerciseService.CreateExercise)
 	route.GET("/exercises/:exerciseId", middleware.Authentication(userService), exerciseService.GetExercise)
-	route.GET("/exercises/:exerciseId/score", middleware.Authentication(userService), exerciseService.GetUserScore)
+	route.GET("/exercises/:exerciseId/score", middleware.Authentication(userService), exerciseService.GetScore)
 	route.POST("/exercises/:exerciseId/questions", middleware.Authentication(userService), exerciseService.CreateQuestions)
 	route.POST("/exercises/:exerciseId/questions/:questionId/answer", middleware.Authentication(userService), exerciseService.CreateAnswer)
 
